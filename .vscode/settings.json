@@ -1,0 +1,16 @@
+{
+	"prettier.semi": true,
+	"prettier.singleQuote": true,
+	"prettier.jsxBracketSameLine": true,
+	"prettier.useTabs": true,
+	"prettier.printWidth": 40,
+	"prettier.tabWidth": 2,
+	"editor.tabSize": 2,
+	"editor.foldingStrategy": "indentation",
+	// "git.enabled": false,
+	"git.autofetch": false,
+	"editor.codeActionsOnSave": {
+		"source.organizeImports": true
+	},
+	"editor.formatOnSave": true
+}
