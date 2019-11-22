@@ -468,7 +468,7 @@ const PeriodicTableJSON = {
 				'silvery gray metallic',
 			atomic_mass: 26.98153857,
 			boil: 2743,
-			category: 'post-transition metal',
+			category: 'post transition metal',
 			color: null,
 			density: 2.7,
 			discovered_by: null,
@@ -1431,7 +1431,7 @@ const PeriodicTableJSON = {
 			appearance: 'silver-white',
 			atomic_mass: 69.7231,
 			boil: 2673,
-			category: 'post-transition metal',
+			category: 'post transition metal',
 			color: null,
 			density: 5.91,
 			discovered_by:
@@ -2163,7 +2163,7 @@ const PeriodicTableJSON = {
 				'silvery lustrous gray',
 			atomic_mass: 114.8181,
 			boil: 2345,
-			category: 'post-transition metal',
+			category: 'post transition metal',
 			color: null,
 			density: 7.31,
 			discovered_by: 'Ferdinand Reich',
@@ -2177,7 +2177,7 @@ const PeriodicTableJSON = {
 				'https://en.wikipedia.org/wiki/Indium',
 			spectral_img: null,
 			summary:
-				"Indium is a chemical element with symbol In and atomic number 49. It is a post-transition metallic element that is rare in Earth's crust. The metal is very soft, malleable and easily fusible, with a melting point higher than sodium, but lower than lithium or tin.",
+				"Indium is a chemical element with symbol In and atomic number 49. It is a post transition metallic element that is rare in Earth's crust. The metal is very soft, malleable and easily fusible, with a melting point higher than sodium, but lower than lithium or tin.",
 			symbol: 'In',
 			xpos: 13,
 			ypos: 5,
@@ -2199,7 +2199,7 @@ const PeriodicTableJSON = {
 				'silvery-white (beta, \u03b2) or gray (alpha, \u03b1)',
 			atomic_mass: 118.7107,
 			boil: 2875,
-			category: 'post-transition metal',
+			category: 'post transition metal',
 			color: null,
 			density: 7.365,
 			discovered_by:
@@ -3287,7 +3287,7 @@ const PeriodicTableJSON = {
 			appearance: 'silvery white',
 			atomic_mass: 204.38,
 			boil: 1746,
-			category: 'post-transition metal',
+			category: 'post transition metal',
 			color: null,
 			density: 11.85,
 			discovered_by: 'William Crookes',
@@ -3301,7 +3301,7 @@ const PeriodicTableJSON = {
 				'https://en.wikipedia.org/wiki/Thallium',
 			spectral_img: null,
 			summary:
-				'Thallium is a chemical element with symbol Tl and atomic number 81. This soft gray post-transition metal is not found free in nature. When isolated, it resembles tin, but discolors when exposed to air.',
+				'Thallium is a chemical element with symbol Tl and atomic number 81. This soft gray post transition metal is not found free in nature. When isolated, it resembles tin, but discolors when exposed to air.',
 			symbol: 'Tl',
 			xpos: 13,
 			ypos: 6,
@@ -3321,7 +3321,7 @@ const PeriodicTableJSON = {
 			appearance: 'metallic gray',
 			atomic_mass: 207.21,
 			boil: 2022,
-			category: 'post-transition metal',
+			category: 'post transition metal',
 			color: null,
 			density: 11.34,
 			discovered_by: 'Middle East',
@@ -3335,7 +3335,7 @@ const PeriodicTableJSON = {
 				'https://en.wikipedia.org/wiki/Lead_(element)',
 			spectral_img: null,
 			summary:
-				'Lead (/l\u025bd/) is a chemical element in the carbon group with symbol Pb (from Latin:plumbum) and atomic number 82. Lead is a soft, malleable and heavy post-transition metal. Metallic lead has a bluish-white color after being freshly cut, but it soon tarnishes to a dull grayish color when exposed to air.',
+				'Lead (/l\u025bd/) is a chemical element in the carbon group with symbol Pb (from Latin:plumbum) and atomic number 82. Lead is a soft, malleable and heavy post transition metal. Metallic lead has a bluish-white color after being freshly cut, but it soon tarnishes to a dull grayish color when exposed to air.',
 			symbol: 'Pb',
 			xpos: 14,
 			ypos: 6,
@@ -3357,7 +3357,7 @@ const PeriodicTableJSON = {
 			appearance: 'lustrous silver',
 			atomic_mass: 208.980401,
 			boil: 1837,
-			category: 'post-transition metal',
+			category: 'post transition metal',
 			color: null,
 			density: 9.78,
 			discovered_by:
@@ -3372,7 +3372,7 @@ const PeriodicTableJSON = {
 				'https://en.wikipedia.org/wiki/Bismuth',
 			spectral_img: null,
 			summary:
-				'Bismuth is a chemical element with symbol Bi and atomic number 83. Bismuth, a pentavalent post-transition metal, chemically resembles arsenic and antimony. Elemental bismuth may occur naturally, although its sulfide and oxide form important commercial ores.',
+				'Bismuth is a chemical element with symbol Bi and atomic number 83. Bismuth, a pentavalent post transition metal, chemically resembles arsenic and antimony. Elemental bismuth may occur naturally, although its sulfide and oxide form important commercial ores.',
 			symbol: 'Bi',
 			xpos: 15,
 			ypos: 6,
@@ -3395,7 +3395,7 @@ const PeriodicTableJSON = {
 			appearance: 'silvery',
 			atomic_mass: 209,
 			boil: 1235,
-			category: 'post-transition metal',
+			category: 'post transition metal',
 			color: null,
 			density: 9.196,
 			discovered_by: 'Pierre Curie',
@@ -4178,8 +4178,7 @@ const PeriodicTableJSON = {
 			appearance: null,
 			atomic_mass: 278,
 			boil: null,
-			category:
-				'unknown, probably transition metal',
+			category: 'transition metal',
 			color: null,
 			density: 37.4,
 			discovered_by:
@@ -4210,8 +4209,7 @@ const PeriodicTableJSON = {
 			appearance: null,
 			atomic_mass: 281,
 			boil: null,
-			category:
-				'unknown, probably transition metal',
+			category: 'transition metal',
 			color: null,
 			density: 34.8,
 			discovered_by:
@@ -4242,8 +4240,7 @@ const PeriodicTableJSON = {
 			appearance: null,
 			atomic_mass: 282,
 			boil: null,
-			category:
-				'unknown, probably transition metal',
+			category: 'transition metal',
 			color: null,
 			density: 28.7,
 			discovered_by:
@@ -4305,8 +4302,7 @@ const PeriodicTableJSON = {
 			appearance: null,
 			atomic_mass: 286,
 			boil: 1430,
-			category:
-				'unknown, probably transition metal',
+			category: 'transition metal',
 			color: null,
 			density: 16,
 			discovered_by: 'RIKEN',
@@ -4336,7 +4332,7 @@ const PeriodicTableJSON = {
 			appearance: null,
 			atomic_mass: 289,
 			boil: 420,
-			category: 'post-transition metal',
+			category: 'post transition metal',
 			color: null,
 			density: 14,
 			discovered_by:
@@ -4367,8 +4363,7 @@ const PeriodicTableJSON = {
 			appearance: null,
 			atomic_mass: 289,
 			boil: 1400,
-			category:
-				'unknown, probably post-transition metal',
+			category: 'post transition metal',
 			color: null,
 			density: 13.5,
 			discovered_by:
@@ -4399,8 +4394,7 @@ const PeriodicTableJSON = {
 			appearance: null,
 			atomic_mass: 293,
 			boil: 1085,
-			category:
-				'unknown, probably post-transition metal',
+			category: 'post transition metal',
 			color: null,
 			density: 12.9,
 			discovered_by:
@@ -4431,8 +4425,7 @@ const PeriodicTableJSON = {
 			appearance: null,
 			atomic_mass: 294,
 			boil: 883,
-			category:
-				'unknown, probably metalloid',
+			category: 'metalloid',
 			color: null,
 			density: 7.17,
 			discovered_by:
@@ -4463,8 +4456,7 @@ const PeriodicTableJSON = {
 			appearance: null,
 			atomic_mass: 294,
 			boil: 350,
-			category:
-				'unknown, predicted to be noble gas',
+			category: 'noble gas',
 			color: null,
 			density: 4.95,
 			discovered_by:
@@ -4495,8 +4487,7 @@ const PeriodicTableJSON = {
 			appearance: null,
 			atomic_mass: 315,
 			boil: 630,
-			category:
-				'unknown, but predicted to be an alkali metal',
+			category: 'alkali metal',
 			color: null,
 			density: 3,
 			discovered_by:
@@ -4533,11 +4524,51 @@ const PeriodicTableJSON = {
 		}
 	]
 };
-export const normalizePeriodicTableJSON = PeriodicTableJSON.elements.reduce((result,value)=>{
-  const {xpos
-    ,ypos} = value
-  let id = `${xpos}_${ypos}`
-  result[id]= value
-  return result
-},{})
+export const normalizePeriodicTableJSON = PeriodicTableJSON.elements.reduce(
+	(result, value) => {
+		const { xpos, ypos } = value;
+		let id = `${xpos}_${ypos}`;
+		result[id] = value;
+		return result;
+	},
+	{}
+);
+// export const categories = PeriodicTableJSON.elements.reduce(
+// 	(result, value) => {
+// 		const { category } = value;
+// 		result[category] = category;
+// 		return result;
+// 	},
+// 	{}
+// );
+// console.log(categories);
+export const categories = {
+	'diatomic nonmetal':
+		'diatomic-nonmetal',
+	'noble gas': 'noble-gas',
+	'alkali metal': 'alkali-metal',
+	'alkaline earth metal':
+		'alkaline-earth-metal',
+	metalloid: 'metalloid',
+	'polyatomic nonmetal':
+		'polyatomic-nonmetal',
+	'post transition metal':
+		'post-transition-metal',
+	'transition metal':
+		'transition-metal',
+	lanthanide: 'lanthanide',
+	actinide: 'actinide'
+};
+export const categoryColors = {
+	'diatomic nonmetal': 'red',
+	'noble gas': 'orange',
+	'alkali metal': 'yellow',
+	'alkaline earth metal': 'indigo',
+	metalloid: 'gray',
+	'polyatomic nonmetal': 'green',
+	'post transition metal': 'teal',
+	'transition metal': 'blue',
+	lanthanide: 'purple',
+	actinide: 'pink'
+};
 export default PeriodicTableJSON;
