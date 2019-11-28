@@ -132,12 +132,14 @@ const Detail = ({
 				key =>
 					(element[key] && (
 						<div
-							className="bg-gray-100 flex px-4 py-1 text-black hover:bg-gray-200"
+							className="bg-gray-100  flex px-4 py-1 text-black hover:bg-gray-200"
 							key={key}>
-							<div className="flex-1 ">
+							<div
+								key={key}
+								className=" fadeInRight animated faster">
 								{key}
 							</div>
-							<div className="self-end">
+							<div className="self-end flex-1 text-right">
 								{Object.values(
 									'' + element[key]
 								).map((value, i) => (
@@ -159,6 +161,38 @@ const Detail = ({
 		domNode
 	);
 };
+
+export const useThrottle = (
+	value,
+	limit = 300
+) => {
+	const [
+		throttledValue,
+		setThrottledValue
+	] = useState(value);
+	const lastRan = useRef(Date.now());
+	useEffect(() => {
+		const handler = setTimeout(
+			function() {
+				if (
+					Date.now() -
+						lastRan.current >=
+					limit
+				) {
+					setThrottledValue(value);
+					lastRan.current = Date.now();
+				}
+			},
+			limit -
+				(Date.now() - lastRan.current)
+		);
+
+		return () => {
+			clearTimeout(handler);
+		};
+	}, [value, limit]);
+	return throttledValue;
+};
 const PeriodicTable = () => {
 	const detailRef = useRef();
 	const containerRef = useRef();
@@ -179,21 +213,22 @@ const PeriodicTable = () => {
 		currentCategory,
 		setCurrentCategory
 	] = useState();
+	const animate = useThrottle(() => {
+		const poss = pinned || current;
+		if (containerRef.current) {
+			containerRef.current.style.setProperty(
+				'--top',
+				`${-(300 * (poss[0] - 1))}px`
+			);
+			containerRef.current.style.setProperty(
+				'--left',
+				`${-(300 * (poss[1] - 1))}px`
+			);
+		}
+	});
 	useEffect(() => {
-		requestAnimationFrame(() => {
-			const poss = pinned || current;
-			if (containerRef.current) {
-				containerRef.current.style.setProperty(
-					'--top',
-					`${-(300 * (poss[0] - 1))}px`
-				);
-				containerRef.current.style.setProperty(
-					'--left',
-					`${-(300 * (poss[1] - 1))}px`
-				);
-			}
-		});
-	}, [current, pinned]);
+		animate && animate();
+	}, [animate]);
 	const redered = useMemo(
 		() => (
 			<div
@@ -445,16 +480,25 @@ const PeriodicTable = () => {
 	const id = `${poss[1]}_${poss[0]}`;
 	const element =
 		normalizePeriodicTableJSON[id];
-	return (
-		<>
-			{redered}
-			{detailRef.current && (
+	const throttledElement = useThrottle(
+		element,
+		500
+	);
+	const detail = useMemo(
+		() =>
+			detailRef.current && (
 				<Detail
 					domNode={detailRef.current}
-					element={element}
+					element={throttledElement}
 				/>
-			)}
-		</>
+			),
+		[throttledElement]
+	);
+	return (
+		<div className="w-full overflow-y-scroll ">
+			{redered}
+			{detail}
+		</div>
 	);
 };
 export default PeriodicTable;
