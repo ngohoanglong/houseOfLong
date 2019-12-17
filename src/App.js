@@ -11,9 +11,12 @@ import {
 import palette from 'google-palette';
 import React, {
 	useContext,
+	useEffect,
 	useState
 } from 'react';
+import { logparams } from './logparams';
 import PeriodicTable from './PeriodicTable/PeriodicTable';
+import Portfolio from './Portfolio';
 
 const createTheme = (
 	main,
@@ -29,7 +32,10 @@ const createTheme = (
 			secondary: {
 				main: secondary
 			},
-			error: red
+			error: red,
+			background:{
+				
+			}
 			// Used by `getContrastText()` to maximize the contrast between the background and
 			// the text.
 			// contrastThreshold: 3,
@@ -166,7 +172,7 @@ const Header = () => {
 	const classes = useLayoutStyles();
 	const domains = [
 		'Periodic',
-		'profile',
+		'portfolio',
 		'blog',
 		'music'
 	];
@@ -296,15 +302,35 @@ const OpenStotyThemeProvider = ({
 		</ThemeProvider>
 	);
 };
+const Switch = ({ children }) => {
+	const { location } = useContext(
+		RouterContext
+	);
+	const pathname =
+		location.pathname || 'portfolio';
+	return (
+		children.find(e =>
+			logparams(
+				logparams(
+					e
+				).props.path.includes(
+					logparams(pathname)
+				)
+			)
+		) || children[0]
+	);
+};
 const renderRoute = route => {
 	const { routes, ...rest } = route;
 	return (
 		<Route key={rest.path} {...rest}>
-			{routes
-				? routes.map(route =>
-						renderRoute(route)
-				  )
-				: null}
+			<Switch>
+				{routes
+					? routes.map(route =>
+							renderRoute(route)
+					  )
+					: null}
+			</Switch>
 		</Route>
 	);
 };
@@ -314,16 +340,12 @@ const routes = [
 		component: Layout,
 		routes: [
 			{
-				path: 'profile',
+				path: 'portfolio',
 				component: () => (
 					<>
 						<Header />
-						<Nav></Nav>
 						<Content>
-							<ContentHeader />
-							<Container maxWidth="md">
-								PROFILE
-							</Container>
+							<Portfolio />
 						</Content>
 					</>
 				)
@@ -377,31 +399,52 @@ const Route = ({
 	component,
 	children
 }) => {
-	const { location } = useContext(
-		RouterContext
-	);
-	if (
-		location.pathname.search(path) !== 0
-	)
-		return null;
 	return React.createElement(
 		component,
 		{ children }
 	);
 };
 const RouterContext = React.createContext();
-const RouterProvider = ({
-	initialValues = {
-		location: {
-			pathname: 'Periodic'
-		}
-	},
-	...props
-}) => {
+
+const createStorage = () => {
+	const storage = {
+		pathname:
+			localStorage.getItem(
+				'pathname'
+			) || 'periodic'
+	};
+	const getPathname = () =>
+		storage.pathname;
+	const setPathname = pathname =>
+		localStorage.setItem(
+			'pathname',
+			pathname
+		);
+	return {
+		...storage,
+		getPathname,
+		setPathname
+	};
+};
+const storage = createStorage();
+const useStorage = () => {
+	return storage;
+};
+const RouterProvider = props => {
+	const storage = useStorage();
 	const [
 		location,
 		setLocation
-	] = useState(initialValues.location);
+	] = useState({
+		pathname:
+			storage.getPathname() ||
+			'Periodic'
+	});
+	useEffect(() => {
+		storage.setPathname(
+			location.pathname
+		);
+	}, [location.pathname]);
 	const push = pathname =>
 		setLocation({ pathname });
 	return (
@@ -413,13 +456,11 @@ const RouterProvider = ({
 };
 function App() {
 	return (
-		<RouterProvider>
-			<OpenStotyThemeProvider>
-				{routes.map(route =>
-					renderRoute(route)
-				)}
-			</OpenStotyThemeProvider>
-		</RouterProvider>
+		<OpenStotyThemeProvider>
+			<RouterProvider>
+				{routes.map(renderRoute)}
+			</RouterProvider>
+		</OpenStotyThemeProvider>
 	);
 }
 

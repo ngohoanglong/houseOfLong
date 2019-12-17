@@ -6,16 +6,12 @@ import React, {
 } from 'react';
 import ReactDOM from 'react-dom';
 import 'tailwindcss/dist/tailwind.min.css';
-import './animate.css';
+import '../assets/css/animate.css';
+import { logparams } from '../logparams';
 import {
 	categoryColors,
 	normalizePeriodicTableJSON
 } from './PeriodicTableJSON';
-const logparams = value => {
-	console.log(value);
-	return value;
-};
-
 /**
  * Decimal adjustment of a number.
  *
@@ -193,11 +189,15 @@ export const useThrottle = (
 	}, [value, limit]);
 	return throttledValue;
 };
-const PeriodicTable = () => {
+const PeriodicTable = ({
+	onChange = () => null
+}) => {
 	const detailRef = useRef();
 	const containerRef = useRef();
 	const pinnedRef = useRef();
-
+	useEffect(() => {
+		onChange();
+	});
 	const [
 		pinned,
 		setPinned
@@ -227,255 +227,281 @@ const PeriodicTable = () => {
 		}
 	});
 	useEffect(() => {
-		animate && animate();
+		animate &&
+			requestAnimationFrame(animate);
 	}, [animate]);
-	const redered = useMemo(
-		() => (
-			<div
-				ref={containerRef}
-				className="w-full h-full p-4 overflow-hidden">
-				<div className="w-full h-full flex items-start">
-					<div className="w-full  flex items-start flex-wrap z-10">
-						{new Array(11)
-							.fill(true)
-							.map((_, x) => {
-								return (
-									<React.Fragment
-										key={x}>
-										{new Array(19)
-											.fill(true)
-											.map((_, y) => {
-												const id = `${y}_${x}`;
-												const element =
-													normalizePeriodicTableJSON[
-														id
+	const rederedCachesRef = useRef({});
+	const redered = useMemo(() => {
+		let e =
+			rederedCachesRef.current[
+				currentCategory
+			];
+		if (!e)
+			e = (
+				<div
+					ref={containerRef}
+					className="w-full h-full p-4 overflow-hidden">
+					<div className="w-full h-full flex items-start">
+						<div className="w-full  flex items-start flex-wrap z-10">
+							{new Array(11)
+								.fill(true)
+								.map((_, x) => {
+									return (
+										<React.Fragment
+											key={x}>
+											{new Array(19)
+												.fill(true)
+												.map((_, y) => {
+													const id = `${y}_${x}`;
+													const element =
+														normalizePeriodicTableJSON[
+															id
+														];
+													const poss = [
+														x,
+														y
 													];
-												const poss = [
-													x,
-													y
-												];
-												return (
-													<div
-														className=" overflow-hidden relative"
-														key={y}
-														style={{
-															width: `${100 /
-																19}%`
-														}}>
+													return (
 														<div
+															className=" relative overflow-hidden"
+															key={y}
 															style={{
-																width: `100%`,
-																paddingTop:
-																	'100%'
-															}}></div>
-														{element ? (
+																width: `${100 /
+																	19}%`
+															}}>
 															<div
-																style={
-																	!currentCategory ||
-																	element.category ===
-																		currentCategory
-																		? {
-																				opacity: 1
-																		  }
-																		: {
-																				opacity: 0.3
-																		  }
-																}
-																onClick={() => {
-																	if (
-																		poss ===
-																		pinnedRef.current
-																	) {
-																		setPinned(
-																			undefined
-																		);
-																	} else {
-																		setPinned(
+																style={{
+																	width: `100%`,
+																	paddingTop:
+																		'100%'
+																}}></div>
+															{element ? (
+																<button
+																	style={{
+																		outlineColor:
+																			'currentColor',
+																		...(!currentCategory ||
+																		element.category ===
+																			currentCategory
+																			? {
+																					opacity: 1
+																			  }
+																			: {
+																					opacity: 0.3
+																			  })
+																	}}
+																	onClick={() => {
+																		if (
+																			poss ===
+																			pinnedRef.current
+																		) {
+																			setPinned(
+																				undefined
+																			);
+																		} else {
+																			setPinned(
+																				poss
+																			);
+																		}
+																	}}
+																	onMouseEnter={() =>
+																		setCurrent(
 																			poss
-																		);
+																		)
 																	}
-																}}
-																onMouseEnter={() =>
-																	setCurrent(
-																		poss
-																	)
-																}
-																className={`cursor-pointer border border-${
-																	categoryColors[
-																		element
-																			.category
-																	]
-																}-300 text-${
-																	categoryColors[
-																		element
-																			.category
-																	]
-																}-700 text-center justify-center w-full  bg-${
-																	categoryColors[
-																		element
-																			.category
-																	]
-																}-200 hover:bg-${
-																	categoryColors[
-																		element
-																			.category
-																	]
-																}-300 flex flex-col items-center h-full absolute top-0 left-0`}>
-																<div
-																	className="font-bold"
-																	style={{
-																		fontSize:
-																			'0.8vw'
-																	}}>
-																	{
-																		element.symbol
-																	}
-																</div>
-																<div
-																	style={{
-																		fontSize:
-																			'0.6vw'
-																	}}>
-																	{round10(
-																		element.atomic_mass,
-																		-4
-																	)}
-																</div>
-															</div>
-														) : (
-															(!x ||
-																!y ||
-																null) && (
-																<div className="cursor-pointer   text-center justify-center w-full  flex flex-col items-center h-full absolute top-0 left-0">
-																	{x +
-																		y}
-																</div>
-															)
-														)}
-													</div>
-												);
-											})}
-									</React.Fragment>
-								);
-							})}
-						<div className="w-full mt-4 flex flex-wrap justify-start">
-							{Object.keys(
-								categoryColors
-							).map(key => (
-								<div
-									key={key}
-									className="pt-2 px-1">
-									<div
-										style={{
-											fontSize: '0.9vw'
-										}}
-										onMouseEnter={() =>
-											setCurrentCategory(
-												key
-											)
-										}
-										onMouseLeave={() =>
-											setCurrentCategory(
-												null
-											)
-										}
-										className={`font-bold  leading-relaxed cursor-pointer  text-${categoryColors[key]}-700 text-center justify-center w-full  bg-${categoryColors[key]}-300 hover:bg-${categoryColors[key]}-400 px-2  rounded-full`}>
-										{key}
-									</div>
-								</div>
-							))}
-						</div>
-					</div>
-					<div className="p-4">
-						<div
-							style={{ width: 300 }}
-							className="relative">
-							<div
-								style={{
-									width: `100%`,
-									paddingTop: '100%'
-								}}></div>
-
-							<div
-								style={{
-									transition:
-										'all 0.25s linear 0s',
-									width: 300 * 19,
-									top: 'var(--top)',
-									left: 'var(--left)'
-								}}
-								className="absolute top-0 left-0 w-full  flex items-start flex-wrap">
-								{new Array(11)
-									.fill(true)
-									.map((_, x) => {
-										return (
-											<React.Fragment
-												key={x}>
-												{new Array(19)
-													.fill(true)
-													.map(
-														(_, y) => {
-															const id = `${y +
-																1}_${x +
-																1}`;
-															const element = logparams(
-																normalizePeriodicTableJSON
-															)[
-																logparams(
-																	id
-																)
-															];
-															return (
-																<div
-																	className=" overflow-hidden relative"
-																	key={
-																		y
-																	}
-																	style={{
-																		width: `${100 /
-																			19}%`
-																	}}>
+																	className={`cursor-pointer border border-${
+																		categoryColors[
+																			element
+																				.category
+																		]
+																	}-300 text-${
+																		categoryColors[
+																			element
+																				.category
+																		]
+																	}-700 text-center justify-center w-full  bg-${
+																		categoryColors[
+																			element
+																				.category
+																		]
+																	}-200 hover:bg-${
+																		categoryColors[
+																			element
+																				.category
+																		]
+																	}-300  flex flex-col items-center h-full absolute top-0 left-0`}>
 																	<div
 																		style={{
-																			width: `100%`,
-																			paddingTop:
-																				'100%'
-																		}}></div>
-																	{element && (
-																		<div className="justify-center p-4 items-start w-full flex  h-full absolute top-0 left-0">
-																			<div className="flex-1">
-																				{' '}
-																				<div
-																					className="font-bold flex-1"
-																					style={{
-																						fontSize:
-																							'60px'
-																					}}>
-																					{
-																						element.symbol
-																					}
+																			fontSize:
+																				'0.6vw'
+																		}}
+																		className="p-1 leading-none absolute top-0 left-0">
+																		{
+																			element.number
+																		}
+																	</div>
+																	<div
+																		className="font-bold "
+																		style={{
+																			fontSize:
+																				'0.8vw'
+																		}}>
+																		{
+																			element.symbol
+																		}
+																	</div>
+																	<div
+																		style={{
+																			fontSize:
+																				'0.6vw'
+																		}}>
+																		{round10(
+																			element.atomic_mass,
+																			-4
+																		)}
+																	</div>
+																</button>
+															) : (
+																(!x ||
+																	!y ||
+																	null) && (
+																	<div className="cursor-pointer   text-center justify-center w-full  flex flex-col items-center h-full absolute top-0 left-0">
+																		{x +
+																			y}
+																	</div>
+																)
+															)}
+														</div>
+													);
+												})}
+										</React.Fragment>
+									);
+								})}
+							<div className="w-full mt-4 flex flex-wrap justify-start">
+								{Object.keys(
+									categoryColors
+								).map(key => (
+									<div
+										key={key}
+										className="pt-2 px-1">
+										<div
+											style={{
+												fontSize:
+													'0.9vw'
+											}}
+											onMouseEnter={() =>
+												setCurrentCategory(
+													key
+												)
+											}
+											onMouseLeave={() =>
+												setCurrentCategory(
+													null
+												)
+											}
+											className={`font-bold  leading-relaxed cursor-pointer  text-${categoryColors[key]}-700 text-center justify-center w-full  bg-${categoryColors[key]}-300 hover:bg-${categoryColors[key]}-400 px-2  rounded-full`}>
+											{key}
+										</div>
+									</div>
+								))}
+							</div>
+						</div>
+						<div className="p-4">
+							<div
+								style={{ width: 300 }}
+								className="relative">
+								<div
+									style={{
+										width: `100%`,
+										paddingTop: '100%'
+									}}></div>
+
+								<div
+									style={{
+										transition:
+											'all 0.25s linear 0s',
+										width: 300 * 19,
+										top: 'var(--top)',
+										left: 'var(--left)'
+									}}
+									className="absolute top-0 left-0 w-full  flex items-start flex-wrap">
+									{new Array(11)
+										.fill(true)
+										.map((_, x) => {
+											return (
+												<React.Fragment
+													key={x}>
+													{new Array(19)
+														.fill(true)
+														.map(
+															(
+																_,
+																y
+															) => {
+																const id = `${y +
+																	1}_${x +
+																	1}`;
+																const element =
+																	normalizePeriodicTableJSON[
+																		logparams(
+																			id
+																		)
+																	];
+																return (
+																	<div
+																		className=" overflow-hidden relative"
+																		key={
+																			y
+																		}
+																		style={{
+																			width: `${100 /
+																				19}%`
+																		}}>
+																		<div
+																			style={{
+																				width: `100%`,
+																				paddingTop:
+																					'100%'
+																			}}></div>
+																		{element && (
+																			<div className="justify-center p-4 items-start w-full flex  h-full absolute top-0 left-0">
+																				<div className="flex-1">
+																					{' '}
+																					<div
+																						className="font-bold flex-1"
+																						style={{
+																							fontSize:
+																								'60px'
+																						}}>
+																						{
+																							element.symbol
+																						}
+																					</div>
 																				</div>
 																			</div>
-																		</div>
-																	)}
-																</div>
-															);
-														}
-													)}
-											</React.Fragment>
-										);
-									})}
+																		)}
+																	</div>
+																);
+															}
+														)}
+												</React.Fragment>
+											);
+										})}
+								</div>
+								<div
+									ref={detailRef}
+									className="absolute top-0 left-0 w-full h-full flex items-start flex-wrap"></div>
 							</div>
-							<div
-								ref={detailRef}
-								className="absolute top-0 left-0 w-full h-full flex items-start flex-wrap"></div>
 						</div>
 					</div>
 				</div>
-			</div>
-		),
-		[currentCategory]
-	);
+			);
+		rederedCachesRef.current[
+			currentCategory
+		] = e;
+		logparams(rederedCachesRef.current);
+		return e;
+	}, [currentCategory]);
 	const poss = pinned || current;
 	const id = `${poss[1]}_${poss[0]}`;
 	const element =
@@ -495,10 +521,11 @@ const PeriodicTable = () => {
 		[throttledElement]
 	);
 	return (
-		<div className="w-full overflow-y-scroll ">
+		<div className="w-full h-full overflow-y-scroll ">
 			{redered}
 			{detail}
 		</div>
 	);
 };
+
 export default PeriodicTable;
