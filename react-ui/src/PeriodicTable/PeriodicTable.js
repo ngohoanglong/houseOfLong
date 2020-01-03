@@ -521,7 +521,7 @@ const PeriodicTable = ({
 		[throttledElement]
 	);
 	return (
-		<div className="w-full h-full overflow-y-scroll ">
+		<div className="w-full h-full overflow-hidden ">
 			{redered}
 			{detail}
 		</div>
