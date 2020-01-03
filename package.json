@@ -6,6 +6,7 @@
 	},
 	"scripts": {
 		"start": "node server",
+		"prebuild": "cd gatsby-blog/ && npm install && npm run build",
 		"build": "cd react-ui/ && npm install && npm run build"
 	},
 	"cacheDirectories": [

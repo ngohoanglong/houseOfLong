@@ -39,7 +39,15 @@ if (!isDev && cluster.isMaster) {
 			)
 		)
 	);
-
+	app.use(
+		'/blog',
+		express.static(
+			path.resolve(
+				__dirname,
+				'../gatsby-blog/public'
+			)
+		)
+	);
 	// Answer API requests.
 	app.get('/api', function(req, res) {
 		res.set(
@@ -51,6 +59,18 @@ if (!isDev && cluster.isMaster) {
 		);
 	});
 
+	app.get('/blog', function(
+		request,
+		response
+	) {
+		response.sendFile(
+			path.resolve(
+				__dirname,
+				'../gatsby-blog/public',
+				'index.html'
+			)
+		);
+	});
 	// All remaining requests return the React app, so it can handle routing.
 	app.get('*', function(
 		request,
