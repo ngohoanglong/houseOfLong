@@ -2,17 +2,21 @@ import React, {
 	useCallback,
 	useState
 } from 'react';
-import '../tailwind.css';
-import './animate.css';
 import EnIcon from './EnIcon';
-import { FeedConsumer } from './Feeds';
+import Feeds, {
+	FeedConsumer
+} from './Feeds';
 import MapCorona from './Map/MapCorona';
-import { SearchContextConsumer } from './Search';
-import { SourceContext } from './Sources';
+import Search, {
+	SearchContextConsumer
+} from './Search';
+import Sources, {
+	SourceContext
+} from './Sources';
 import './styles.scss';
 import VnIcon from './VnIcon';
 
-export default function Corona() {
+export function Corona() {
 	const [ready, setReady] = useState();
 	const [
 		keyword,

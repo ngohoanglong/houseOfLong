@@ -5,13 +5,12 @@ import React, {
 	useState
 } from 'react';
 import ReactDOM from 'react-dom';
-import 'tailwindcss/dist/tailwind.min.css';
-import '../assets/css/animate.css';
 import { logparams } from '../logparams';
 import {
 	categoryColors,
 	normalizePeriodicTableJSON
 } from './PeriodicTableJSON';
+
 /**
  * Decimal adjustment of a number.
  *

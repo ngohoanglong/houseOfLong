@@ -1,8 +1,17 @@
 import { useTheme } from '@material-ui/styles';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { animated, useChain, useSpring, useTrail, useTransition } from 'react-spring';
-import 'tailwindcss/dist/tailwind.min.css';
-import '../assets/css/animate.css';
+import React, {
+	useEffect,
+	useMemo,
+	useRef,
+	useState
+} from 'react';
+import {
+	animated,
+	useChain,
+	useSpring,
+	useTrail,
+	useTransition
+} from 'react-spring';
 import './index.css';
 import { WordCloud } from './WordCloud';
 

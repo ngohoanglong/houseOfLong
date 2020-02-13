@@ -14,10 +14,12 @@ import React, {
 	useEffect,
 	useState
 } from 'react';
+import './assets/css/animate.css';
+import './assets/css/tailwind.css';
+import Corona from './Corona';
 import { logparams } from './logparams';
 import PeriodicTable from './PeriodicTable/PeriodicTable';
 import Portfolio from './Portfolio';
-
 const createTheme = (
 	main,
 	secondary,
@@ -172,7 +174,7 @@ const Header = () => {
 		'Periodic',
 		'portfolio',
 		'blog',
-		'music'
+		'corona'
 	];
 	return (
 		<div className={classes.header}>
@@ -367,16 +369,12 @@ const routes = [
 				}
 			},
 			{
-				path: 'music',
+				path: 'corona',
 				component: () => (
 					<>
 						<Header />
-						<Nav></Nav>
 						<Content>
-							<ContentHeader />
-							<Container maxWidth="md">
-								MUSIC
-							</Container>
+							<Corona />
 						</Content>
 					</>
 				)
