@@ -140,7 +140,7 @@ const useLayoutStyles = makeStyles(
 					theme.palette.grey[bgNav]
 			},
 			content: {
-				whiteSpace: 'pre',
+				// whiteSpace: 'pre',
 				flex: 1,
 				display: 'flex',
 				flexDirection: 'column',

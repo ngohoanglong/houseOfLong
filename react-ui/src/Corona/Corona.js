@@ -28,7 +28,7 @@ export function Corona() {
 	return (
 		<>
 			<div
-				className="App"
+				className="Corona md:text-xs"
 				ref={handleReady}>
 				<div className="w-full flex flex-wrap">
 					<SourceContext.Consumer>
@@ -174,17 +174,17 @@ export function Corona() {
 									);
 								}}
 							/>
-							<div>
-								<div className="BlockRow mt-2">
-									<span className="font-bold bg-white px-2 text-white rounded bg-red-600 text-sm ">
+							<div className="mt-2">
+								<div className="BlockRow ">
+									<small className="font-bold leading-loose bg-white px-2 text-white rounded bg-red-600 ">
 										nhiễm
-									</span>
-									<span className="font-bold  ml-4 bg-white px-2 text-white rounded bg-gray-500 text-sm ml-2">
+									</small>
+									<small className="font-bold leading-loose  ml-4 bg-white px-2 text-white rounded bg-gray-500  ml-2">
 										dẹo
-									</span>
-									<span className="font-bold  ml-4 bg-white px-2 text-white rounded bg-green-500 text-sm ml-2">
+									</small>
+									<small className="font-bold leading-loose  ml-4 bg-white px-2 text-white rounded bg-green-500  ml-2">
 										come back
-									</span>
+									</small>
 								</div>
 								<SearchContextConsumer>
 									{search => {
@@ -294,7 +294,7 @@ export function Corona() {
 														className="BlockRow ">
 														<div className="border-b border-gray-700  hover:border-gray-500 hover:text-white font-bold py-2">
 															{title}{' '}
-															<span className="bg-white px-2 text-white rounded bg-red-600 text-sm ml-2">
+															<span className="bg-white px-2 text-white rounded bg-red-600  ml-2">
 																{
 																	confirmedcases
 																}
@@ -302,7 +302,7 @@ export function Corona() {
 															{!!Number(
 																deaths
 															) > 0 && (
-																<span className="bg-white px-2 text-white rounded bg-gray-500 text-sm ml-2">
+																<span className="bg-white px-2 text-white rounded bg-gray-500  ml-2">
 																	{
 																		deaths
 																	}
@@ -427,7 +427,7 @@ export function Corona() {
 														className="BlockRow ">
 														<div className="border-b border-gray-700  hover:border-gray-500 hover:text-white font-bold py-2">
 															{title}{' '}
-															<span className="bg-white px-2 text-white rounded bg-red-600 text-sm ml-2">
+															<span className="bg-white px-2 text-white rounded bg-red-600  ml-2">
 																{
 																	confirmedcases
 																}
@@ -435,7 +435,7 @@ export function Corona() {
 															{!!Number(
 																deaths
 															) > 0 && (
-																<span className="bg-white px-2 text-white rounded bg-gray-500 text-sm ml-2">
+																<span className="bg-white px-2 text-white rounded bg-gray-500  ml-2">
 																	{
 																		deaths
 																	}
@@ -570,47 +570,49 @@ export function Corona() {
 									return (
 										<div
 											key={item.link}
-											className="BlockRow clearfix border-b Feed border-gray-700  hover:border-gray-500  py-2">
-											<div
-												dangerouslySetInnerHTML={{
-													__html: `<a
+											className="BlockRow  clearfix border-b Feed border-gray-700  hover:border-gray-500 ">
+											<div className="py-2">
+												<div
+													dangerouslySetInnerHTML={{
+														__html: `<a
                           class="font-bold block FeedTitle  hover:underline text-white"
                           href="${item.link}"
                           target="_blank"
                         >
                           ${item.title}
                         </a>${item.content}`
-												}}
-											/>
-											<div className="truncate mt-2 clearfix flex items-center">
-												<span className="pr-1 flex items-center flex-1">
-													<img
-														className="inline pr-1 m-0"
-														alt=""
-														src={`https://www.google.com/s2/favicons?domain=${item.orginUrl}`}
-														style={{
-															width:
-																'unset',
-															verticalAlign:
-																'sub',
-															margin:
-																'0px'
-														}}
-													/>
-													<span className="ml-1">
-														{
-															item.orginUrl
-														}
+													}}
+												/>
+												<div className="truncate mt-2 clearfix flex items-center">
+													<span className="pr-1 flex items-center flex-1">
+														<img
+															className="inline pr-1 m-0"
+															alt=""
+															src={`https://www.google.com/s2/favicons?domain=${item.orginUrl}`}
+															style={{
+																width:
+																	'unset',
+																verticalAlign:
+																	'sub',
+																margin:
+																	'0px'
+															}}
+														/>
+														<span className="ml-1">
+															{
+																item.orginUrl
+															}
+														</span>
 													</span>
-												</span>
-												<time
-													dateTime={
-														item.isoDate
-													}>
-													{new Date(
-														item.isoDate
-													).toLocaleDateString()}
-												</time>
+													<time
+														dateTime={
+															item.isoDate
+														}>
+														{new Date(
+															item.isoDate
+														).toLocaleDateString()}
+													</time>
+												</div>
 											</div>
 										</div>
 									);
