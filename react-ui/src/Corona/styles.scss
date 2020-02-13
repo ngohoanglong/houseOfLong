@@ -1,0 +1,54 @@
+@import '../assets/css/tailwind.css';
+
+body,
+html {
+	margin: 0;
+	padding: 0;
+	background: #000;
+}
+.App {
+	width: 100%;
+	align-items: flex-start;
+	min-height: 100vh;
+	display: flex;
+	flex-wrap: wrap;
+}
+.Block {
+	color: #bdbdbd;
+	min-height: 100px;
+	background: #2d3748;
+	box-shadow: inset 0px 0px 0px 5px
+			rgba(0, 0, 0, 1),
+		inset 0px 0px 0px 6px #718096;
+	padding: 1em;
+}
+.BlockRow {
+	margin: 0 -1em;
+	padding: 0 1em;
+}
+.BlockTitle {
+	position: sticky;
+	top: 0.8em;
+	font-weight: 500;
+	padding: 0.2em 0.4em;
+	margin-right: 2em;
+	margin-left: -1.1em;
+	display: inline-block;
+	background: #2d3748;
+	border: 1px solid #718096;
+	font-size: 0.9em;
+}
+.Feed {
+	font-size: 0.7em;
+}
+.FeedTitle {
+	font-size: 1.2em;
+}
+.Feed img {
+	float: right;
+	margin-top: 0.6em;
+	margin-left: 0.6em;
+	margin-bottom: 0.6em;
+	width: 180px;
+	max-width: 30%;
+}

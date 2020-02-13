@@ -33,9 +33,7 @@ const createTheme = (
 				main: secondary
 			},
 			error: red,
-			background:{
-				
-			}
+			background: {}
 			// Used by `getContrastText()` to maximize the contrast between the background and
 			// the text.
 			// contrastThreshold: 3,
@@ -191,6 +189,7 @@ const Header = () => {
 								}
 								key={i}
 								style={{
+									fontSize: '14px',
 									background: main,
 									color: '#fff'
 								}}
@@ -352,18 +351,20 @@ const routes = [
 			},
 			{
 				path: 'blog',
-				component: () => (
-					<>
-						<Header />
-						<Nav></Nav>
-						<Content>
-							<ContentHeader />
-							<Container maxWidth="md">
-								BLOG
-							</Container>
-						</Content>
-					</>
-				)
+				component: () => {
+					return (
+						<>
+							<Header />
+							<Nav></Nav>
+							<Content>
+								<ContentHeader />
+								<Container maxWidth="md">
+									BLOG
+								</Container>
+							</Content>
+						</>
+					);
+				}
 			},
 			{
 				path: 'music',
@@ -445,8 +446,18 @@ const RouterProvider = props => {
 			location.pathname
 		);
 	}, [location.pathname]);
-	const push = pathname =>
-		setLocation({ pathname });
+	const push = pathname => {
+		switch (pathname) {
+			case 'blog':
+				window.location.href = '/blog';
+				break;
+
+			default:
+				setLocation({ pathname });
+				break;
+		}
+	};
+
 	return (
 		<RouterContext.Provider
 			value={{ location, push }}
