@@ -1,0 +1,49 @@
+.DarkLightToggle {
+	display: block;
+	position: relative;
+	width: 3.6em;
+	height: 3.6em;
+	overflow: hidden;
+	border-radius: 100%;
+	transform: rotate(135deg);
+	font-size: 14px;
+}
+.DarkLightTogglewrap {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	height: 3.6em;
+	width: 7.2em;
+	background: #fff;
+	transition: transform 0.3s
+			cubic-bezier(
+				0.68,
+				-0.55,
+				0.27,
+				1.55
+			),
+		background 0.6s
+			cubic-bezier(
+				0.68,
+				-0.55,
+				0.27,
+				1.55
+			);
+}
+.DarkLightToggle input {
+	display: none;
+}
+#DarkLightToggle:checked
+	+ .DarkLightTogglewrap {
+	transform: translatex(-50%);
+	background: #000;
+}
+.DarkLightTogglewrap::before {
+	content: '☀️';
+	width: 3.8em;
+}
+.DarkLightTogglewrap::after {
+	content: '🌙';
+	width: 3.8em;
+}

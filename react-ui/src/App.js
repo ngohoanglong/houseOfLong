@@ -16,6 +16,7 @@ import React, {
 } from 'react';
 import './assets/css/animate.css';
 import './assets/css/tailwind.css';
+import DarkLightToggle from './components/DarkLightToggle';
 import Corona from './Corona';
 import { logparams } from './logparams';
 import PeriodicTable from './PeriodicTable/PeriodicTable';
@@ -100,7 +101,8 @@ const useLayoutStyles = makeStyles(
 				flexShrink: 0,
 				flexDirection: 'column',
 				alignItems: 'center',
-				width: 70,
+				maxWidth: 70,
+				width: '4em',
 				background:
 					theme.palette.grey[bgHeader],
 				position: 'sticky',
@@ -118,9 +120,9 @@ const useLayoutStyles = makeStyles(
 				fontSize: '1.2em',
 				fontWeight: 'bold',
 				marginTop: theme.spacing(2),
-				width: 50,
-				height: 50,
-				lineHeight: '50px',
+				width: '3.6em',
+				height: '3.6em',
+				lineHeight: '3.6em',
 				textAlign: 'center',
 				display: 'flex',
 				background:
@@ -208,21 +210,13 @@ const Header = () => {
 				title="dark / light"
 				placement="right">
 				<div
-					onClick={setThemeType}
-					style={
-						themeType === 'light'
-							? {
-									background: '#000',
-									color: '#fff'
-							  }
-							: {
-									background: '#fff',
-									color: '#000'
-							  }
-					}
-					className={
-						classes.headerItem
-					}></div>
+					style={{
+						marginTop: '16px'
+					}}>
+					<DarkLightToggle
+						onChange={setThemeType}
+					/>
+				</div>
 			</Tooltip>
 		</div>
 	);
