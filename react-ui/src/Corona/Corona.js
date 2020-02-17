@@ -203,7 +203,7 @@ export function Corona() {
 														<div className="border-b border-gray-700  hover:border-gray-500 hover:text-white font-bold py-2">
 															{
 																entry[
-																	'id'
+																	'title'
 																]
 															}
 														</div>
