@@ -26,41 +26,25 @@ const Search = ({ children }) => {
 	const searchRef = useRef(
 		new JsSearch.Search('id')
 	);
-
 	useEffect(() => {
 		if (source) {
-			cookedSourceRef.current = source.data.flatMap(
-				item => [
-					{
-						id: `${item.title}`,
-						title: item.title,
-						type: 'country'
-					},
-					{
-						...item,
-						id: `${item.title}_${item.gsx$location}`,
-						title: `${item.title} (${item.gsx$location})`,
-						type: 'location'
-					},
-					...item.data.map(
-						dayRecord => ({
-							...item,
-							...dayRecord,
-							id: `${dayRecord.type}_${item.title}_${item.gsx$location}_${dayRecord.date}`,
-							title: `${dayRecord.type}_${item.title}_${item.gsx$location}_${dayRecord.date}`
-						})
-					)
-				]
-			);
+			cookedSourceRef.current =
+				source.data;
 			const search = searchRef.current;
 			search.addIndex('country');
-			search.addIndex('gsx$country');
 			search.addIndex('date');
 			search.addIndex('type');
-			search.addIndex('gsx$location');
+			search.addIndex('location');
 			search.addDocuments(
 				cookedSourceRef.current
 			);
+			console.log(
+				search.search('country')
+			);
+			window.app = {
+				source,
+				search: search.search
+			};
 			setready(true);
 		}
 	}, [source]);

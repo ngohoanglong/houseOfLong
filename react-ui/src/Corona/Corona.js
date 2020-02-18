@@ -1,7 +1,12 @@
 import React, {
 	useCallback,
+	useEffect,
 	useState
 } from 'react';
+import {
+	Sparklines,
+	SparklinesLine
+} from 'react-sparklines';
 import EnIcon from './EnIcon';
 import Feeds, {
 	FeedConsumer
@@ -15,13 +20,265 @@ import Sources, {
 } from './Sources';
 import './styles.scss';
 import VnIcon from './VnIcon';
+const DebounceRenderer = ({
+	children
+}) => {
+	const [
+		rendered,
+		setRendered
+	] = useState(null);
+	useEffect(() => {
+		const timeout = setTimeout(
+			() => setRendered(children()),
+			300
+		);
+		return () => clearTimeout(timeout);
+	}, [children]);
+	return rendered;
+};
+const VietNam = () => (
+	<SearchContextConsumer>
+		{search => {
+			const searchData = search(
+				'vietnam 14-02-2020'
+			);
+			console.log(searchData);
+			const cookedData =
+				searchData &&
+				Object.values(
+					searchData.reduce(
+						(result, item) => {
+							let entry =
+								result[
+									item['location']
+								];
+							if (!entry) {
+								result[
+									item['location']
+								] = {
+									title:
+										item['location']
+								};
+								entry =
+									result[
+										item['location']
+									];
+							}
+							if (
+								item.type ===
+								'confirmedcases'
+							) {
+								entry[
+									'confirmedcases'
+								] = item.value;
+							}
+							if (
+								item.type === 'deaths'
+							) {
+								entry['deaths'] =
+									item.value;
+							}
+							return result;
+						},
+						{}
+					)
+				);
+			return (
+				<div className=" Block ">
+					<div className="BlockTitle">
+						Tỉnh thành ở Việt Nam
+					</div>
+					{cookedData.map((item, i) => {
+						const {
+							title,
+							confirmedcases,
+							deaths
+						} = item;
+						return (
+							<div
+								key={i}
+								className="BlockRow ">
+								<div className="border-b border-gray-700  hover:border-gray-500 hover:text-white font-bold py-2">
+									{title}{' '}
+									<span className="bg-white px-2 text-white rounded bg-red-600  ml-2">
+										{confirmedcases}
+									</span>{' '}
+									{!!Number(deaths) >
+										0 && (
+										<span className="bg-white px-2 text-white rounded bg-gray-500  ml-2">
+											{deaths}
+										</span>
+									)}
+								</div>
+							</div>
+						);
+					})}
+					<div className="BlockRow py-2 text-xs text-right whitespace-pre ">
+						{cookedData.length} tỉnh
+						thành
+					</div>
+				</div>
+			);
+		}}
+	</SearchContextConsumer>
+);
+const World = () => (
+	<SearchContextConsumer>
+		{search => {
+			const searchData = search(
+				'14-02-2020'
+			);
+			const cookedData =
+				searchData &&
+				Object.values(
+					searchData.reduce(
+						(result, item) => {
+							let entry =
+								result[item['country']];
+							if (!entry) {
+								result[
+									item['country']
+								] = {
+									title:
+										item['country'],
+									confirmedcases: 0,
+									deaths: 0
+								};
+								entry =
+									result[
+										item['country']
+									];
+							}
+							if (
+								item.type ===
+								'confirmedcases'
+							) {
+								entry[
+									'confirmedcases'
+								] =
+									entry[
+										'confirmedcases'
+									] +
+									Number(item.value);
+							}
+							if (
+								item.type === 'deaths'
+							) {
+								entry['deaths'] =
+									entry['deaths'] +
+									Number(item.value);
+							}
+							return result;
+						},
+						{}
+					)
+				).sort(
+					(p, lp) =>
+						-Number(
+							p['confirmedcases']
+						) +
+						Number(lp['confirmedcases'])
+				);
+			return (
+				<div className=" Block">
+					<div className="BlockTitle">
+						Số ca nhiễm theo quốc gia
+					</div>
 
-export function Corona() {
-	const [ready, setReady] = useState();
+					{cookedData.map((item, i) => {
+						const {
+							title,
+							confirmedcases,
+							deaths
+						} = item;
+						return (
+							<div
+								key={i}
+								className="BlockRow ">
+								<div className="border-b border-gray-700  hover:border-gray-500 hover:text-white font-bold py-2">
+									{title}{' '}
+									<span className="bg-white px-2 text-white rounded bg-red-600  ml-2">
+										{confirmedcases}
+									</span>{' '}
+									{!!Number(deaths) >
+										0 && (
+										<span className="bg-white px-2 text-white rounded bg-gray-500  ml-2">
+											{deaths}
+										</span>
+									)}
+								</div>
+							</div>
+						);
+					})}
+					<div className="BlockRow py-2 text-right">
+						{cookedData.length} nước
+					</div>
+				</div>
+			);
+		}}
+	</SearchContextConsumer>
+);
+const FeatureSearch = () => {
 	const [
 		keyword,
 		setkeyword
 	] = useState();
+	return (
+		<div className="w-full md:w-64 Block">
+			<input
+				placeholder="search..."
+				className="BlockTitle bg-white z-10 w-full px-3 py-1"
+				onChange={e => {
+					setkeyword(e.target.value);
+				}}
+			/>
+			<div className="mt-2">
+				<div className="BlockRow ">
+					<small className="font-bold leading-loose bg-white px-2 text-white rounded bg-red-600 ">
+						nhiễm
+					</small>
+					<small className="font-bold leading-loose  ml-4 bg-white px-2 text-white rounded bg-gray-500  ml-2">
+						dẹo
+					</small>
+					<small className="font-bold leading-loose  ml-4 bg-white px-2 text-white rounded bg-green-500  ml-2">
+						come back
+					</small>
+				</div>
+				<DebounceRenderer>
+					{() => (
+						<SearchContextConsumer>
+							{search => {
+								const searchData = search(
+									keyword
+								);
+								return (
+									searchData &&
+									searchData.map(
+										(entry, i) => (
+											<div
+												key={entry.id}
+												className="BlockRow fadeInRight animated faster">
+												<div className="border-b border-gray-700  hover:border-gray-500 hover:text-white font-bold py-2">
+													{
+														entry[
+															'title'
+														]
+													}
+												</div>
+											</div>
+										)
+									)
+								);
+							}}
+						</SearchContextConsumer>
+					)}
+				</DebounceRenderer>
+			</div>
+		</div>
+	);
+};
+export function Corona() {
+	const [ready, setReady] = useState();
 	const handleReady = useCallback(() => {
 		setReady(true);
 	}, []);
@@ -39,8 +296,8 @@ export function Corona() {
 							);
 							const { source } = value;
 							return (
-								<div className=" Block w-full md:w-2/3 flex flex items-center flex-wrap justify-center">
-									<div>
+								<div className=" Block w-full md:w-2/3 flex flex items-center flex-wrap ">
+									<div className="mr-4">
 										<div className="text-3xl font-bold whitespace-no-wrap">
 											Coronavirus
 											(2019-nCoV)
@@ -52,12 +309,12 @@ export function Corona() {
 											</span>
 										</div>
 									</div>
-									<div className="ml-4 whitespace-pre text-sm flex-1 mt-2">
+									<div className=" whitespace-pre text-sm flex-1 mt-2">
 										{`Cập nhật lần cuối lúc: ${source &&
 											new Date(
 												source.updated
-											).toLocaleDateString()}.
-  Nguồn: WHO, CDC, NHC, DXY & Bộ Y Tế Việt Nam.`}
+											).toLocaleDateString()}.`}
+										<div>{`Nguồn: WHO, CDC, NHC, DXY & Bộ Y Tế Việt Nam.`}</div>
 										<div className="mt-2 flex items-center">
 											<button
 												onClick={() =>
@@ -99,8 +356,9 @@ export function Corona() {
 					<SearchContextConsumer>
 						{search => {
 							const searchData = search(
-								'confirmedcases 10-02-2020'
+								'confirmedcases 14-02-2020'
 							);
+
 							const cookedData = searchData.reduce(
 								(result, item) => {
 									result =
@@ -110,11 +368,35 @@ export function Corona() {
 								},
 								0
 							);
+							const searchBigData = search(
+								'confirmedcases'
+							).reduce(
+								(result, item) => {
+									if (
+										!result[item.date]
+									) {
+										result[
+											item.date
+										] = 0;
+									}
+									result[item.date] =
+										result[item.date] +
+										Number(item.value);
+									return result;
+								},
+								{}
+							);
 							return (
 								<div className="flex-1 Block flex flex-col justify-between overflow-hidden">
 									<div className="text-xs font-bold">
 										So nguoi nhiem
 									</div>
+									<Sparklines
+										data={Object.values(
+											searchBigData
+										)}>
+										<SparklinesLine color="#ff0000" />
+									</Sparklines>
 									<div className="text-2xl text-red-500 font-bold">
 										{cookedData.toLocaleString()}
 									</div>
@@ -126,7 +408,7 @@ export function Corona() {
 					<SearchContextConsumer>
 						{search => {
 							const searchData = search(
-								'deaths 10-02-2020'
+								'deaths 14-02-2020'
 							);
 							const cookedData = searchData.reduce(
 								(result, item) => {
@@ -137,11 +419,35 @@ export function Corona() {
 								},
 								0
 							);
+							const searchBigData = search(
+								'deaths'
+							).reduce(
+								(result, item) => {
+									if (
+										!result[item.date]
+									) {
+										result[
+											item.date
+										] = 0;
+									}
+									result[item.date] =
+										result[item.date] +
+										Number(item.value);
+									return result;
+								},
+								{}
+							);
 							return (
 								<div className="flex-1 Block flex flex-col justify-between  overflow-hidden">
 									<div className="text-xs font-bold">
 										So nguoi chết
 									</div>
+									<Sparklines
+										data={Object.values(
+											searchBigData
+										)}>
+										<SparklinesLine color="#ffffff" />
+									</Sparklines>
 									<div className="text-2xl text-white font-bold">
 										{cookedData.toLocaleString()}
 									</div>
@@ -164,298 +470,9 @@ export function Corona() {
 
 				<div className="w-full flex flex-wrap">
 					<div className="w-full flex flex-col md:w-64">
-						<div className="w-full md:w-64 Block">
-							<input
-								placeholder="search..."
-								className="BlockTitle bg-white z-10 w-full px-3 py-1"
-								onChange={e => {
-									setkeyword(
-										e.target.value
-									);
-								}}
-							/>
-							<div className="mt-2">
-								<div className="BlockRow ">
-									<small className="font-bold leading-loose bg-white px-2 text-white rounded bg-red-600 ">
-										nhiễm
-									</small>
-									<small className="font-bold leading-loose  ml-4 bg-white px-2 text-white rounded bg-gray-500  ml-2">
-										dẹo
-									</small>
-									<small className="font-bold leading-loose  ml-4 bg-white px-2 text-white rounded bg-green-500  ml-2">
-										come back
-									</small>
-								</div>
-								<SearchContextConsumer>
-									{search => {
-										const searchData = search(
-											keyword
-										);
-										return (
-											searchData &&
-											searchData.map(
-												(entry, i) => (
-													<div
-														key={
-															entry.id
-														}
-														className="BlockRow fadeInRight animated faster">
-														<div className="border-b border-gray-700  hover:border-gray-500 hover:text-white font-bold py-2">
-															{
-																entry[
-																	'title'
-																]
-															}
-														</div>
-													</div>
-												)
-											)
-										);
-									}}
-								</SearchContextConsumer>
-							</div>
-						</div>
-						<SearchContextConsumer>
-							{search => {
-								const searchData = search(
-									'vietnam 10-02-2020'
-								);
-								const cookedData =
-									searchData &&
-									Object.values(
-										searchData.reduce(
-											(
-												result,
-												item
-											) => {
-												let entry =
-													result[
-														item[
-															'gsx$location'
-														]
-													];
-												if (!entry) {
-													result[
-														item[
-															'gsx$location'
-														]
-													] = {
-														title:
-															item[
-																'gsx$location'
-															]
-													};
-													entry =
-														result[
-															item[
-																'gsx$location'
-															]
-														];
-												}
-												if (
-													item.type ===
-													'confirmedcases'
-												) {
-													entry[
-														'confirmedcases'
-													] =
-														item.value;
-												}
-												if (
-													item.type ===
-													'deaths'
-												) {
-													entry[
-														'deaths'
-													] =
-														item.value;
-												}
-												return result;
-											},
-											{}
-										)
-									);
-								return (
-									<div className=" Block ">
-										<div className="BlockTitle">
-											Tỉnh thành ở Việt
-											Nam
-										</div>
-										{cookedData.map(
-											(item, i) => {
-												const {
-													title,
-													confirmedcases,
-													deaths
-												} = item;
-												return (
-													<div
-														key={i}
-														className="BlockRow ">
-														<div className="border-b border-gray-700  hover:border-gray-500 hover:text-white font-bold py-2">
-															{title}{' '}
-															<span className="bg-white px-2 text-white rounded bg-red-600  ml-2">
-																{
-																	confirmedcases
-																}
-															</span>{' '}
-															{!!Number(
-																deaths
-															) > 0 && (
-																<span className="bg-white px-2 text-white rounded bg-gray-500  ml-2">
-																	{
-																		deaths
-																	}
-																</span>
-															)}
-														</div>
-													</div>
-												);
-											}
-										)}
-										<div className="BlockRow py-2 text-xs text-right whitespace-pre ">
-											{
-												cookedData.length
-											}{' '}
-											tỉnh thành
-										</div>
-									</div>
-								);
-							}}
-						</SearchContextConsumer>
-						<SearchContextConsumer>
-							{search => {
-								const searchData = search(
-									'10-02-2020'
-								);
-								const cookedData =
-									searchData &&
-									Object.values(
-										searchData.reduce(
-											(
-												result,
-												item
-											) => {
-												let entry =
-													result[
-														item[
-															'title'
-														]
-													];
-												if (!entry) {
-													result[
-														item[
-															'title'
-														]
-													] = {
-														title:
-															item[
-																'title'
-															],
-														confirmedcases: 0,
-														deaths: 0
-													};
-													entry =
-														result[
-															item[
-																'title'
-															]
-														];
-												}
-												if (
-													item.type ===
-													'confirmedcases'
-												) {
-													entry[
-														'confirmedcases'
-													] =
-														entry[
-															'confirmedcases'
-														] +
-														Number(
-															item.value
-														);
-												}
-												if (
-													item.type ===
-													'deaths'
-												) {
-													entry[
-														'deaths'
-													] =
-														entry[
-															'deaths'
-														] +
-														Number(
-															item.value
-														);
-												}
-												return result;
-											},
-											{}
-										)
-									).sort(
-										(p, lp) =>
-											-Number(
-												p[
-													'confirmedcases'
-												]
-											) +
-											Number(
-												lp[
-													'confirmedcases'
-												]
-											)
-									);
-								return (
-									<div className=" Block">
-										<div className="BlockTitle">
-											Số ca nhiễm theo
-											quốc gia
-										</div>
-
-										{cookedData.map(
-											(item, i) => {
-												const {
-													title,
-													confirmedcases,
-													deaths
-												} = item;
-												return (
-													<div
-														key={i}
-														className="BlockRow ">
-														<div className="border-b border-gray-700  hover:border-gray-500 hover:text-white font-bold py-2">
-															{title}{' '}
-															<span className="bg-white px-2 text-white rounded bg-red-600  ml-2">
-																{
-																	confirmedcases
-																}
-															</span>{' '}
-															{!!Number(
-																deaths
-															) > 0 && (
-																<span className="bg-white px-2 text-white rounded bg-gray-500  ml-2">
-																	{
-																		deaths
-																	}
-																</span>
-															)}
-														</div>
-													</div>
-												);
-											}
-										)}
-										<div className="BlockRow py-2 text-right">
-											{
-												cookedData.length
-											}{' '}
-											nước
-										</div>
-									</div>
-								);
-							}}
-						</SearchContextConsumer>
+						<FeatureSearch />
+						<VietNam />
+						<World />
 					</div>
 					<div
 						style={{ padding: '6px' }}
@@ -463,7 +480,7 @@ export function Corona() {
 						<SearchContextConsumer>
 							{search => {
 								const searchData = search(
-									'10-02-2020'
+									'14-02-2020'
 								);
 								const cookedData =
 									searchData &&
