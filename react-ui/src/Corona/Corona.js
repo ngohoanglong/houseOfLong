@@ -222,6 +222,37 @@ const World = () => (
 		}}
 	</SearchContextConsumer>
 );
+const Limit = ({
+	max = 10,
+	children
+}) => {
+	const [show, setShow] = useState(
+		false
+	);
+	useEffect(() => {
+		setShow(false);
+	}, [children]);
+	if (!children) return null;
+	return (
+		<>
+			{children.map(
+				(e, i) => (i < max || show) && e
+			)}
+			<div
+				className="flex justify-center"
+				onClick={() => setShow(!show)}>
+				{children.length - max > 0 && (
+					<div className="px-2 py-1 mt-2  border rounded-full border-gray-300 hover:boxshadow">
+						{show
+							? 'hide'
+							: `+${children.length -
+									max} results`}
+					</div>
+				)}
+			</div>
+		</>
+	);
+};
 const FeatureSearch = () => {
 	const [
 		keyword,
@@ -256,22 +287,31 @@ const FeatureSearch = () => {
 									keyword
 								);
 								return (
-									searchData &&
-									searchData.map(
-										(entry, i) => (
-											<div
-												key={entry.id}
-												className="BlockRow fadeInRight animated faster">
-												<div className="border-b border-gray-700  hover:border-gray-500 hover:text-white font-bold py-2">
-													{
-														entry[
-															'title'
-														]
-													}
-												</div>
-											</div>
-										)
-									)
+									<Limit>
+										{searchData &&
+											searchData.map(
+												(entry, i) => (
+													<div
+														key={
+															entry.id
+														}
+														style={{
+															animationDelay: `${0 +
+																i *
+																	30}ms`
+														}}
+														className="BlockRow fadeInRight animated faster">
+														<div className="border-b border-gray-700  hover:border-gray-500 hover:text-white font-bold py-2">
+															{
+																entry[
+																	'title'
+																]
+															}
+														</div>
+													</div>
+												)
+											)}
+									</Limit>
 								);
 							}}
 						</SearchContextConsumer>
@@ -489,8 +529,8 @@ export function Corona() {
 							);
 							return (
 								<div className="flex-1 Block flex flex-col justify-between overflow-hidden">
-									<div className="text-xs font-bold">
-										So nguoi nhiem
+									<div className="text-xs font-bold capitalize">
+										nhiễm
 									</div>
 									<Sparklines
 										data={Object.values(
@@ -540,8 +580,8 @@ export function Corona() {
 							);
 							return (
 								<div className="flex-1 Block flex flex-col justify-between  overflow-hidden">
-									<div className="text-xs font-bold">
-										So nguoi chết
+									<div className="text-xs font-bold capitalize">
+										dẹo
 									</div>
 									<Sparklines
 										data={Object.values(
@@ -560,7 +600,7 @@ export function Corona() {
 
 					<div className="flex-1 Block flex flex-col justify-between  overflow-hidden">
 						<div className="text-xs font-bold">
-							So nguoi hoi phuc
+							come back
 						</div>
 						<div className="text-2xl text-green-500 font-bold">
 							2,924

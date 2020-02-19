@@ -45,6 +45,7 @@ const Search = ({ children }) => {
 			search.addIndex('country');
 			search.addIndex('date');
 			search.addIndex('type');
+			search.addIndex('title');
 			search.addIndex('location');
 			search.addDocuments(
 				cookedSourceRef.current
