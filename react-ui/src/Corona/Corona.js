@@ -1,6 +1,8 @@
 import React, {
 	useCallback,
+	useContext,
 	useEffect,
+	useRef,
 	useState
 } from 'react';
 import {
@@ -13,7 +15,9 @@ import Feeds, {
 } from './Feeds';
 import MapCorona from './Map/MapCorona';
 import Search, {
-	SearchContextConsumer
+	SearchContext,
+	SearchContextConsumer,
+	SearchFilterContext
 } from './Search';
 import Sources, {
 	SourceContext
@@ -224,7 +228,7 @@ const FeatureSearch = () => {
 		setkeyword
 	] = useState();
 	return (
-		<div className="w-full md:w-64 Block">
+		<div className="w-full lg:w-64 Block">
 			<input
 				placeholder="search..."
 				className="BlockTitle bg-white z-10 w-full px-3 py-1"
@@ -277,6 +281,101 @@ const FeatureSearch = () => {
 		</div>
 	);
 };
+const FeatureMap = () => {
+	const search = useContext(
+		SearchContext
+	);
+	const { dates } = useContext(
+		SearchFilterContext
+	);
+	const [
+		selectedDate,
+		setSelectedDate
+	] = useState(
+		dates[dates.length - 1].id
+	);
+	const searchData = search(
+		selectedDate
+	);
+	const onChange = e =>
+		setSelectedDate(
+			dates[e.target.value - 1].id
+		);
+	const cookedData =
+		searchData &&
+		Object.values(
+			searchData.reduce(
+				(result, item) => {
+					let entry =
+						result[item['country']];
+					if (!entry) {
+						result[item['country']] = {
+							title: item['country'],
+							confirmedcases: 0,
+							deaths: 0
+						};
+						entry =
+							result[item['country']];
+					}
+					if (
+						item.type ===
+						'confirmedcases'
+					) {
+						entry['confirmedcases'] =
+							entry['confirmedcases'] +
+							Number(item.value);
+					}
+					if (item.type === 'deaths') {
+						entry['deaths'] =
+							entry['deaths'] +
+							Number(item.value);
+					}
+					return result;
+				},
+				{}
+			)
+		)
+			.filter(
+				item => item['confirmedcases']
+			)
+			.sort(
+				(p, lp) =>
+					-Number(p['confirmedcases']) +
+					Number(lp['confirmedcases'])
+			);
+	return (
+		<div
+			style={{
+				height: '100%',
+				width: '100%'
+			}}>
+			<DebounceRenderer>
+				{() => (
+					<Cache cacheId={selectedDate}>
+						<MapCorona
+							// key={selectedDate}
+							data={cookedData}
+						/>
+					</Cache>
+				)}
+			</DebounceRenderer>
+
+			<div
+				className="absolute top-0 right-0 p-2 w-40 bg-black opacity-75"
+				key={'year'}>
+				<label>{selectedDate}</label>
+				<input
+					className="w-full"
+					type="range"
+					min={1}
+					onChange={onChange}
+					max={dates.length}
+					step={1}
+				/>
+			</div>
+		</div>
+	);
+};
 export function Corona() {
 	const [ready, setReady] = useState();
 	const handleReady = useCallback(() => {
@@ -285,7 +384,7 @@ export function Corona() {
 	return (
 		<>
 			<div
-				className="Corona md:text-xs"
+				className="Corona lg:text-xs"
 				ref={handleReady}>
 				<div className="w-full flex flex-wrap">
 					<SourceContext.Consumer>
@@ -296,13 +395,15 @@ export function Corona() {
 							);
 							const { source } = value;
 							return (
-								<div className=" Block w-full md:w-2/3 flex flex items-center flex-wrap ">
+								<div className=" Block w-full lg:w-2/3 flex flex items-center flex-wrap ">
 									<div className="mr-4">
-										<div className="text-3xl font-bold whitespace-no-wrap">
-											Coronavirus
-											(2019-nCoV)
+										<div className="text-3xl font-bold flex flex-wrap">
+											Coronavirus{' '}
+											<span>
+												(2019-nCoV)
+											</span>
 										</div>
-										<div className="">
+										<div className="text-sm">
 											Liên hệ:{' '}
 											<span className="text-blue-600">
 												no.noo.nooo.yes@gmail.com
@@ -469,113 +570,23 @@ export function Corona() {
 				</div>
 
 				<div className="w-full flex flex-wrap">
-					<div className="w-full flex flex-col md:w-64">
+					<div className="w-full flex flex-col lg:w-64">
 						<FeatureSearch />
 						<VietNam />
 						<World />
 					</div>
 					<div
 						style={{ padding: '6px' }}
-						className="w-full p-0 flex-1 Block h-screen sticky top-0 hidden md:flex">
-						<SearchContextConsumer>
-							{search => {
-								const searchData = search(
-									'14-02-2020'
-								);
-								const cookedData =
-									searchData &&
-									Object.values(
-										searchData.reduce(
-											(
-												result,
-												item
-											) => {
-												let entry =
-													result[
-														item[
-															'title'
-														]
-													];
-												if (!entry) {
-													result[
-														item[
-															'title'
-														]
-													] = {
-														title:
-															item[
-																'title'
-															],
-														confirmedcases: 0,
-														deaths: 0
-													};
-													entry =
-														result[
-															item[
-																'title'
-															]
-														];
-												}
-												if (
-													item.type ===
-													'confirmedcases'
-												) {
-													entry[
-														'confirmedcases'
-													] =
-														entry[
-															'confirmedcases'
-														] +
-														Number(
-															item.value
-														);
-												}
-												if (
-													item.type ===
-													'deaths'
-												) {
-													entry[
-														'deaths'
-													] =
-														entry[
-															'deaths'
-														] +
-														Number(
-															item.value
-														);
-												}
-												return result;
-											},
-											{}
-										)
-									).sort(
-										(p, lp) =>
-											-Number(
-												p[
-													'confirmedcases'
-												]
-											) +
-											Number(
-												lp[
-													'confirmedcases'
-												]
-											)
-									);
-								return (
-									<MapCorona
-										data={cookedData}
-									/>
-								);
-							}}
-						</SearchContextConsumer>
+						className="w-full p-0 flex-1 Block h-screen sticky top-0 hidden lg:flex">
+						<FeatureMap />
 					</div>
-					<div className="w-full md:w-64 Block">
+					<div className="w-full lg:w-64 Block">
 						<div className="BlockTitle ">
 							Tin tức
 						</div>
 						<FeedConsumer>
 							{(items = []) =>
-								items.map(item => {
+								items.map((item, i) => {
 									console.log(
 										<div
 											dangerouslySetInnerHTML={{
@@ -586,7 +597,7 @@ export function Corona() {
 									);
 									return (
 										<div
-											key={item.link}
+											key={i}
 											className="BlockRow  clearfix border-b Feed border-gray-700  hover:border-gray-500 ">
 											<div className="py-2">
 												<div
@@ -650,6 +661,18 @@ export function Corona() {
 		</>
 	);
 }
+const Cache = ({
+	cacheId,
+	children
+}) => {
+	const cache = useRef({
+		cacheId: children
+	});
+	if (!cache.current[cacheId]) {
+		cache.current[cacheId] = children;
+	}
+	return cache.current[cacheId];
+};
 export default () => (
 	<Sources>
 		<Search>

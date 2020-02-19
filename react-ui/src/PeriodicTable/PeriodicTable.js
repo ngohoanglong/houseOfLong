@@ -88,10 +88,9 @@ const Detail = ({
 					<div
 						className="font-bold flex-1"
 						style={{
+							height: '60px',
 							fontSize: '60px'
-						}}>
-						{' '}
-					</div>
+						}}></div>
 					<div className="font-semibold flex-1">
 						{Object.values(
 							element.name
@@ -240,8 +239,12 @@ const PeriodicTable = ({
 				<div
 					ref={containerRef}
 					className="w-full h-full p-4 overflow-hidden">
-					<div className="w-full h-full flex items-start">
-						<div className="w-full  flex items-start flex-wrap z-10">
+					<div className="w-full h-full flex items-start flex-wrap">
+						<div
+							style={{
+								minWidth: '60%'
+							}}
+							className="flex-1 flex items-start flex-wrap z-10 ">
 							{new Array(11)
 								.fill(true)
 								.map((_, x) => {

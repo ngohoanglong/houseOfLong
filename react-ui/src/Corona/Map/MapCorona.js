@@ -7,7 +7,6 @@ import MapGL, {
 	Layer,
 	Source
 } from 'react-map-gl';
-import ControlPanel from './control-panel';
 import geodata from './countries.geo.json';
 import {
 	dataLayer,
@@ -26,7 +25,8 @@ function updateRange(
 		features
 	} = featureCollection;
 	const scale = scaleQuantile()
-		.domain(features.map(accessor))
+		// .domain(features.map(accessor))
+		.domain([1, 10, 30, 50, 300])
 		.range(range(5));
 	features.forEach(f => {
 		const value = accessor(f);
@@ -52,10 +52,12 @@ export default class MapCorona extends Component {
 			this._loadData();
 		});
 	}
-
+	componentDidUpdate = () => {
+		setTimeout(() => {
+			this._loadData();
+		});
+	};
 	_loadData = () => {
-		console.log('this.props.data');
-		console.log(this.props.data);
 		const data = {
 			...geodata,
 			features: geodata.features.map(
@@ -201,45 +203,31 @@ export default class MapCorona extends Component {
 			data,
 			filter
 		} = this.state;
-		return (
-			<div
-				style={{
-					height: '100%',
-					width: '100%'
-				}}>
-				<MapGL
-					{...viewport}
-					width="100%"
-					height="100%"
-					mapStyle="mapbox://styles/hikaruu/ck6jftnj607dk1io03lhkeu58"
-					onViewportChange={
-						this._onViewportChange
-					}
-					mapboxApiAccessToken={
-						MAPBOX_TOKEN
-					}
-					onHover={this._onHover}>
-					<Source
-						type="geojson"
-						data={data}>
-						<Layer {...dataLayer} />
-						<Layer
-							{...highlightLayer}
-							filter={filter}
-						/>
-					</Source>
-					{this._renderTooltip()}
-				</MapGL>
 
-				<ControlPanel
-					containerComponent={
-						this.props
-							.containerComponent
-					}
-					settings={this.state}
-					onChange={() => {}}
-				/>
-			</div>
+		return (
+			<MapGL
+				{...viewport}
+				width="100%"
+				height="100%"
+				mapStyle="mapbox://styles/hikaruu/ck6jftnj607dk1io03lhkeu58"
+				onViewportChange={
+					this._onViewportChange
+				}
+				mapboxApiAccessToken={
+					MAPBOX_TOKEN
+				}
+				onHover={this._onHover}>
+				<Source
+					type="geojson"
+					data={data}>
+					<Layer {...dataLayer} />
+					<Layer
+						{...highlightLayer}
+						filter={filter}
+					/>
+				</Source>
+				{this._renderTooltip()}
+			</MapGL>
 		);
 	}
 }

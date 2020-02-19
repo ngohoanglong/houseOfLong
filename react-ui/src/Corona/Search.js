@@ -17,6 +17,17 @@ export const {
 	Consumer: SearchContextConsumer,
 	Provider: SearchContextProvider
 } = SearchContext;
+export const SearchFilterContext = React.createContext(
+	{
+		counstries: [],
+		dates: [],
+		locations: []
+	}
+);
+export const {
+	Consumer: SearchFilterConsumer,
+	Provider: SearchFilterProvider
+} = SearchFilterContext;
 const Search = ({ children }) => {
 	const { source } = useContext(
 		SourceContext
@@ -56,7 +67,22 @@ const Search = ({ children }) => {
 	return (
 		<SearchContextProvider
 			value={handleSearch}>
-			{ready && children}
+			{ready && (
+				<SearchFilterProvider
+					value={{
+						counstries: searchRef.current.search(
+							'country'
+						),
+						dates: searchRef.current.search(
+							'date'
+						),
+						locations: searchRef.current.search(
+							'location'
+						)
+					}}>
+					{children}
+				</SearchFilterProvider>
+			)}
 		</SearchContextProvider>
 	);
 };

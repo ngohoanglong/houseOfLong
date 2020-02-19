@@ -7,7 +7,7 @@
 			(100vw - 420px) / 780
 	);
 	--max-size: 18;
-	--min-size: 13;
+	--min-size: 16;
 	font-size: var(--responsive);
 }
 body {
