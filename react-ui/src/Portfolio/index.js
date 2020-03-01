@@ -1,5 +1,6 @@
 import { useTheme } from '@material-ui/styles';
 import React, {
+	useContext,
 	useEffect,
 	useMemo,
 	useRef,
@@ -14,7 +15,33 @@ import {
 } from 'react-spring';
 import './index.css';
 import { WordCloud } from './WordCloud';
-
+const CurrentContext = React.createContext(
+	0
+);
+const ChangeCurrentContext = React.createContext(
+	() => {
+		console.error(
+			'ChangeCurrentContext not been set'
+		);
+	}
+);
+const NavigationProvider = ({
+	children
+}) => {
+	const [
+		current,
+		setCurrent
+	] = useState(0);
+	return (
+		<CurrentContext.Provider
+			value={current}>
+			<ChangeCurrentContext.Provider
+				value={setCurrent}>
+				{children}
+			</ChangeCurrentContext.Provider>
+		</CurrentContext.Provider>
+	);
+};
 const useScroll = (
 	element = window,
 	handler
@@ -34,20 +61,8 @@ const useScroll = (
 };
 const Skills = () => {
 	const title = 'Skills & /Experience';
-	const intersectionRef = React.useRef(
-		null
-	);
-	const intersection = useIntersection(
-		intersectionRef,
-		{
-			root: null,
-			rootMargin: '0px',
-			threshold: 1
-		}
-	);
-	const visible =
-		intersection &&
-		intersection.intersectionRatio >= 1;
+
+	const visible = true;
 	const headerRef = useRef();
 	const trail = useTrail(title.length, {
 		ref: headerRef,
@@ -65,9 +80,7 @@ const Skills = () => {
 	useChain([headerRef], [0, 0.7, 1.3]);
 	return (
 		<>
-			<div
-				ref={intersectionRef}
-				className="pl-8 max-w-lg z-10">
+			<div className="pl-8 max-w-lg z-10">
 				<h1
 					style={{
 						whiteSpace: 'pre-wrap',
@@ -157,20 +170,7 @@ const Skills = () => {
 };
 
 const About = () => {
-	const intersectionRef = React.useRef(
-		null
-	);
-	const intersection = useIntersection(
-		intersectionRef,
-		{
-			root: null,
-			rootMargin: '0px',
-			threshold: 1
-		}
-	);
-	const visible =
-		intersection &&
-		intersection.intersectionRatio >= 1;
+	const visible = true;
 	const headerRef = useRef();
 	const trail = useTrail(
 		'About me'.length,
@@ -206,9 +206,7 @@ const About = () => {
 	);
 	return (
 		<>
-			<div
-				ref={intersectionRef}
-				className="pl-8 max-w-lg z-10">
+			<div className="pl-8 max-w-lg z-10">
 				<h1
 					style={{
 						whiteSpace: 'pre-wrap',
@@ -362,20 +360,7 @@ const useIntersection = (
 	return intersectionObserverEntry;
 };
 const HomeContent = ({}) => {
-	const intersectionRef = React.useRef(
-		null
-	);
-	const intersection = useIntersection(
-		intersectionRef,
-		{
-			root: null,
-			rootMargin: '0px',
-			threshold: 1
-		}
-	);
-	const visible =
-		intersection &&
-		intersection.intersectionRatio >= 1;
+	const visible = true;
 	const headerRef = useRef();
 	const trail = useTrail(items.length, {
 		ref: headerRef,
@@ -420,9 +405,7 @@ const HomeContent = ({}) => {
 		[0, 1, 2]
 	);
 	return (
-		<div
-			ref={intersectionRef}
-			className="pl-8">
+		<div className="pl-8">
 			<h1
 				style={{
 					whiteSpace: 'pre-wrap',
@@ -526,20 +509,7 @@ const HomeContent = ({}) => {
 	);
 };
 const Contact = ({}) => {
-	const intersectionRef = React.useRef(
-		null
-	);
-	const intersection = useIntersection(
-		intersectionRef,
-		{
-			root: null,
-			rootMargin: '0px',
-			threshold: 1
-		}
-	);
-	const visible =
-		intersection &&
-		intersection.intersectionRatio >= 1;
+	const visible = true;
 	const headerRef = useRef();
 	const trail = useTrail(
 		'Contact'.length,
@@ -629,9 +599,7 @@ const Contact = ({}) => {
 					}}
 					className="absolute shadow top-0 right-0  flex justify-center items-center"></div>
 			</div>
-			<div
-				ref={intersectionRef}
-				className="pl-8 max-w-lg z-10">
+			<div className="pl-8 max-w-lg z-10">
 				<h1
 					style={{
 						whiteSpace: 'pre-wrap',
@@ -840,8 +808,34 @@ const PageWrap = ({
 	index,
 	children
 }) => {
+	const intersectionRef = React.useRef(
+		null
+	);
+	const current = useContext(
+		CurrentContext
+	);
+	const setCurrent = useContext(
+		ChangeCurrentContext
+	);
+	const intersection = useIntersection(
+		intersectionRef,
+		{
+			root: null,
+			rootMargin: '0px',
+			threshold: 1
+		}
+	);
+	useEffect(() => {
+		const visible =
+			intersection &&
+			intersection.intersectionRatio >=
+				1;
+		if (visible) setCurrent(index);
+	}, [intersection]);
 	return (
-		<div className="w-full  h-full flex-col flex px-4 absolute top-0 left-0">
+		<div
+			ref={intersectionRef}
+			className="w-full  h-full flex-col flex px-4 absolute top-0 left-0">
 			<div
 				style={{
 					paddingTop: 50
@@ -912,7 +906,8 @@ const PageWrap = ({
 					<div className="jsCode pl-4">
 						return
 					</div>
-					{children}
+					{current === index &&
+						children}
 					<div className="jsCode ">
 						{'}'}
 					</div>
@@ -997,9 +992,7 @@ const Loading = ({ children }) => {
 		}
 	);
 };
-const AppReady = React.createContext(
-	false
-);
+
 function Portfolio() {
 	const theme = useTheme();
 	const themeType = theme.palette.type;
@@ -1051,7 +1044,7 @@ function Portfolio() {
 										scrollSnapAlign:
 											'start'
 									}}
-									className="w-full h-full overflow-hidden  flex-shrink-0 relative">
+									className="w-full h-screen overflow-hidden  flex-shrink-0 relative">
 									<PageWrap
 										index={i}
 										title={value}>
@@ -1106,7 +1099,11 @@ function Portfolio() {
 		);
 	}, [themeType]);
 	if (!e) return null;
-	return e;
+	return (
+		<NavigationProvider>
+			{e}
+		</NavigationProvider>
+	);
 }
 
 export default Portfolio;

@@ -1,6 +1,8 @@
 const express = require('express');
+
 const path = require('path');
 const cluster = require('cluster');
+const api = require('./api');
 const numCPUs = require('os').cpus()
 	.length;
 
@@ -48,16 +50,6 @@ if (!isDev && cluster.isMaster) {
 			)
 		)
 	);
-	// Answer API requests.
-	app.get('/api', function(req, res) {
-		res.set(
-			'Content-Type',
-			'application/json'
-		);
-		res.send(
-			'{"message":"Hello from the custom server!"}'
-		);
-	});
 
 	app.get('/blog', function(
 		request,
@@ -71,6 +63,10 @@ if (!isDev && cluster.isMaster) {
 			)
 		);
 	});
+
+	// Answer API requests.
+	api(app);
+
 	// All remaining requests return the React app, so it can handle routing.
 	app.get('*', function(
 		request,
