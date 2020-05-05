@@ -1,34 +1,48 @@
 {
-	"name": "ngohoanglong2019",
-	"version": "0.0.0",
-	"engines": {
-		"node": "10.x"
-	},
-	"scripts": {
-		"start": "node server",
-		"prebuild": "cd gatsby-blog/ && npm install && npm run build",
-		"build": "cd react-ui/ && npm install && npm run build"
-	},
-	"cacheDirectories": [
-		"node_modules",
-		"react-ui/node_modules"
-	],
-	"dependencies": {
-		"express": "^4.16.4",
-		"jsdom": "^16.2.0",
-		"react": "^16.13.1",
-		"react-dom": "^16.13.1",
-		"request": "^2.88.2"
-	},
-	"repository": {
-		"type": "git"
-	},
-	"keywords": [
-		"node",
-		"heroku",
-		"create-react-app",
-		"react"
-	],
-	"license": "MIT",
-	"devDependencies": {}
+  "name": "ngohoanglong2019",
+  "version": "0.0.0",
+  "engines": {
+    "node": "10.x"
+  },
+  "scripts": {
+    "start": "node server",
+    "prebuild": "cd gatsby-blog/ && npm install && npm run build",
+    "build": "cd react-ui/ && npm install && npm run build",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "cacheDirectories": [
+    "node_modules",
+    "react-ui/node_modules"
+  ],
+  "dependencies": {
+    "@storybook/addon-knobs": "^5.3.18",
+    "@storybook/addon-storysource": "^5.3.18",
+    "express": "^4.16.4",
+    "jsdom": "^16.2.0",
+    "polished": "^3.6.1",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "request": "^2.88.2",
+    "styled-components": "^5.1.0"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "create-react-app",
+    "react"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@storybook/addon-actions": "^5.3.18",
+    "@storybook/addon-links": "^5.3.18",
+    "@storybook/addons": "^5.3.18",
+    "@storybook/react": "^5.3.18",
+    "babel-loader": "^8.1.0"
+  }
 }
