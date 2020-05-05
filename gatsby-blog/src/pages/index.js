@@ -1,7 +1,8 @@
 import React from "react"
+import Layout from "../components/layout"
 
 const IndexPage = () => (
-  <div>
+  <Layout>
     <a
       href="https://github.com/phuoc-ng/csslayout"
       rel="noopener noreferrer"
@@ -5477,7 +5478,7 @@ const IndexPage = () => (
         <div className="pt-4">© 2020 Nguyen Huu Phuoc. All rights reserved</div>
       </div>
     </div>
-  </div>
+  </Layout>
 )
 
 export default IndexPage
