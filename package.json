@@ -7,9 +7,7 @@
 	"scripts": {
 		"start": "npm install && node server",
 		"prebuild": "cd gatsby-blog/ && npm install && npm run build",
-		"build": "cd react-ui/ && npm install && npm run build",
-		"storybook": "start-storybook -p 6006",
-		"build-storybook": "build-storybook"
+		"build": "cd react-ui/ && npm install && npm run build"
 	},
 	"cacheDirectories": [
 		"node_modules",
@@ -22,8 +20,7 @@
 		"prop-types": "^15.7.2",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
-		"request": "^2.88.2",
-		"styled-components": "^5.1.0"
+		"request": "^2.88.2"
 	},
 	"repository": {
 		"type": "git"
@@ -34,8 +31,5 @@
 		"create-react-app",
 		"react"
 	],
-	"license": "MIT",
-	"devDependencies": {
-		"@babel/core": "^7.9.6"
-	}
+	"license": "MIT"
 }
