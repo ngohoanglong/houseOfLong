@@ -2,10 +2,27 @@ module.exports = {
   pathPrefix: `/blog`,
   siteMetadata: {
     title: `ngohoanglong blog`,
-    description: `What insterst me.`,
+    description: `What insterest me.`,
     author: `@ngohoanglong`,
   },
   plugins: [
+    {
+      resolve: "gatsby-source-firestore",
+      options: {
+        credential: require("./credential.json"),
+        types: [
+          {
+            type: "Profile",
+            collection: "profile",
+            map: doc => ({
+              name: doc.name,
+              contentStr: doc.content,
+              content: JSON.parse(doc.content),
+            }),
+          },
+        ],
+      },
+    },
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,
