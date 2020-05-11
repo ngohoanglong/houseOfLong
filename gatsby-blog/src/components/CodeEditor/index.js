@@ -9,6 +9,7 @@ languages.forEach(lang => {
 })
 themes.forEach(theme => require(`ace-builds/src-noconflict/theme-${theme}`))
 const CodeEditor = ({ value, onChange }) => {
+  if (!window) return null
   return (
     <AceEditor
       width={"100%"}
