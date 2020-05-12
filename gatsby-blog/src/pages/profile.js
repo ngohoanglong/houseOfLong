@@ -108,16 +108,18 @@ const Profile = ({ data }) => {
             ))}
           </div>
         </div>
-        <div className="col-span-4  flex flex-col">
-          <div className="sticky top-0 p-6 h-screen">
-            <CodeEditor
-              value={JSON.stringify(content, null, 2)}
-              onChange={v => {
-                setContent(JSON.parse(v))
-              }}
-            />
+        {window && (
+          <div className="col-span-4  flex flex-col">
+            <div className="sticky top-0 p-6 h-screen">
+              <CodeEditor
+                value={JSON.stringify(content, null, 2)}
+                onChange={v => {
+                  setContent(JSON.parse(v))
+                }}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </Layout>
   )
