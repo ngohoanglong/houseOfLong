@@ -2,7 +2,6 @@
 
 import { flattenDeep } from "lodash-es"
 import React from "react"
-import CodeEditor from "../components/CodeEditor"
 import Layout from "../components/layout"
 import { useState } from "react"
 const isObject = value =>
@@ -24,7 +23,6 @@ const renderRow = (value, key = "root") => {
   }
   return undefined
 }
-
 const Profile = ({ data }) => {
   const siteTitle = data.site.siteMetadata.title
   const profileStr = data.profile.contentStr
@@ -35,7 +33,7 @@ const Profile = ({ data }) => {
   return (
     <Layout>
       <div className="grid grid-cols-12 gap-4 ">
-        <div className=" col-span-8 p-6 mx-auto max-w-screen-lg bg-white">
+        <div className=" col-span-12 p-6 mx-auto max-w-screen-lg bg-white">
           {/* Name */}
           <header className="flex items-center mb-8 md:mb-11">
             <div
@@ -108,23 +106,17 @@ const Profile = ({ data }) => {
             ))}
           </div>
         </div>
-        {window && (
-          <div className="col-span-4  flex flex-col">
-            <div className="sticky top-0 p-6 h-screen">
-              <CodeEditor
-                value={JSON.stringify(content, null, 2)}
-                onChange={v => {
-                  setContent(JSON.parse(v))
-                }}
-              />
-            </div>
-          </div>
-        )}
       </div>
     </Layout>
   )
 }
-export default Profile
+export default props => {
+  return (
+    <Layout>
+      <Profile {...props} />
+    </Layout>
+  )
+}
 export const pageQuery = graphql`
   query {
     site {
