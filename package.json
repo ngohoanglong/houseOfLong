@@ -14,7 +14,7 @@
 		"react-ui/node_modules"
 	],
 	"dependencies": {
-		"express": "^4.16.4",
+		"express": "^4.17.3",
 		"jsdom": "^16.2.0",
 		"polished": "^3.6.1",
 		"prop-types": "^15.7.2",
